@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 
 namespace CoreMvc3_Bootstrap
@@ -40,7 +42,14 @@ namespace CoreMvc3_Bootstrap
                 app.UseHsts();
             }
             app.UseHttpsRedirection();
+
             app.UseStaticFiles();
+
+            //app.UseStaticFiles(new StaticFileOptions
+            //{
+            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "HtmlPages")),
+            //    RequestPath = "/WebPages"
+            //});
 
             app.UseRouting();
 
@@ -52,6 +61,14 @@ namespace CoreMvc3_Bootstrap
                 //    name: "defaultPage",
                 //    pattern: "",
                 //    defaults: new { controller="Home", action="Privacy" });
+
+            //以下兩個路由設定方式相同
+            //https://docs.microsoft.com/zh-tw/aspnet/core/fundamentals/routing?view=aspnetcore-3.1
+                endpoints.MapControllerRoute(
+                    name: "default_route",
+                    pattern: "{controller}/{action}/{id?}",
+                    defaults: new { controller = "Home", action = "Index" });
+
 
                 endpoints.MapControllerRoute(
                     name: "default",
